@@ -59,6 +59,7 @@ public class CodeBuilderCloud extends Cloud {
   private static final String DEFAULT_JNLP_IMAGE = "lsegal/jnlp-docker-agent:alpine";
   private static final int DEFAULT_AGENT_TIMEOUT = 120;
   private static final String DEFAULT_COMPUTE_TYPE = "BUILD_GENERAL1_SMALL";
+  private static final boolean DEFAULT_TERMINATE_AGENT = true;
 
   static {
     clearAllNodes();
