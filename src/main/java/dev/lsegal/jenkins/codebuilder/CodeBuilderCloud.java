@@ -78,6 +78,7 @@ public class CodeBuilderCloud extends Cloud {
   private String jenkinsUrl;
   private String jnlpImage;
   private int agentTimeout;
+  private boolean terminateAgent;
 
   private transient AWSCodeBuild client;
 
@@ -389,6 +390,14 @@ public class CodeBuilderCloud extends Cloud {
     }
   }
 
+  public boolean isTerminateAgent() {
+    return terminateAgent;
+  }
+  
+  public void setTerminateAgent(boolean terminateAgent) {
+    this.terminateAgent = terminateAgent;
+  }
+    
   @Extension
   public static class DescriptorImpl extends Descriptor<Cloud> {
     @Override
@@ -406,6 +415,10 @@ public class CodeBuilderCloud extends Cloud {
 
     public String getDefaultComputeType() {
       return DEFAULT_COMPUTE_TYPE;
+    }
+
+    public boolean getDefaultTerminateAgent() {
+    	return DEFAULT_TERMINATE_AGENT;
     }
 
     public ListBoxModel doFillCredentialsIdItems() {
