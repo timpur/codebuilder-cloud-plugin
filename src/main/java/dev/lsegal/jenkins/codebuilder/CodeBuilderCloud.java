@@ -329,7 +329,8 @@ public class CodeBuilderCloud extends Cloud {
   @Override
   public synchronized Collection<PlannedNode> provision(Label label, int excessWorkload) {
     List<NodeProvisioner.PlannedNode> list = new ArrayList<NodeProvisioner.PlannedNode>();
-
+    String labelName = label == null ? getLabel() : label.getDisplayName();
+    LOGGER.info("[CodeBuilder]: Excess workload sent by Jenkins: {} for label: {}", excessWorkload, labelName);
     // guard against non-matching labels
     if (label != null && !label.matches(Arrays.asList(new LabelAtom(getLabel())))) {
       return list;
@@ -343,7 +344,6 @@ public class CodeBuilderCloud extends Cloud {
       return list;
     }
 
-    String labelName = label == null ? getLabel() : label.getDisplayName();
     long stillProvisioning = numStillProvisioning();
     long numToLaunch = Math.max(excessWorkload - stillProvisioning, 0);
     LOGGER.info("[CodeBuilder]: Provisioning {} nodes for label '{}' ({} already provisioning)", numToLaunch, labelName,
@@ -372,7 +372,7 @@ public class CodeBuilderCloud extends Cloud {
    */
   private long numStillProvisioning() {
     return jenkins().getNodes().stream().filter(CodeBuilderAgent.class::isInstance).map(CodeBuilderAgent.class::cast)
-        .filter(a -> a.getLauncher().isLaunchSupported()).count();
+        .filter(a -> !a.getLauncher().isLaunchSupported()).count();
   }
 
   /** {@inheritDoc} */
