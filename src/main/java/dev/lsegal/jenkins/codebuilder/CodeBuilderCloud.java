@@ -378,8 +378,14 @@ public class CodeBuilderCloud extends Cloud {
   /** {@inheritDoc} */
   @Override
   public boolean canProvision(Label label) {
+    LOGGER.info("[CodeBuilder]: Check if can provision node for label '{}'", label);
     boolean canProvision = label == null ? true : label.matches(Arrays.asList(new LabelAtom(getLabel())));
-    LOGGER.info("[CodeBuilder]: Check provisioning capabilities for label '{}': {}", label, canProvision);
+    if (canProvision) {
+      LOGGER.info("[CodeBuilder]: Label '{}' matches current label '{}'. Node will be provisioned...", label, getLabel());
+    }
+    else {
+      LOGGER.info("[CodeBuilder]: Label '{}' DOESN'T MATCH current label '{}'. Node WON'T provisioned...", label, getLabel());
+    }
     return canProvision;
   }
 
