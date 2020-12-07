@@ -14,6 +14,8 @@ import com.amazonaws.services.codebuild.model.BatchGetProjectsResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.commons.lang.StringUtils;
+
 import hudson.model.Node;
 import hudson.model.TaskListener;
 import hudson.slaves.JNLPLauncher;
@@ -73,8 +75,12 @@ public class CodeBuilderLauncher extends JNLPLauncher {
     String existingBuildSpec = projects.getProjects().get(0).getSource().getBuildspec();
     StartBuildRequest req = new StartBuildRequest().withProjectName(cloud.getProjectName())
         .withSourceTypeOverride(SourceType.NO_SOURCE).withBuildspecOverride(buildspec(existingBuildSpec, computer))
-        .withImageOverride(cloud.getJnlpImage()).withPrivilegedModeOverride(true).withTimeoutInMinutesOverride(480)
+        .withPrivilegedModeOverride(true).withTimeoutInMinutesOverride(480)
         .withComputeTypeOverride(cloud.getComputeType());
+
+    if (!StringUtils.isBlank(cloud.getJnlpImage())) {
+      req = req.withImageOverride(cloud.getJnlpImage());
+    }
 
     try {
       StartBuildResult res = cloud.getClient().startBuild(req);
