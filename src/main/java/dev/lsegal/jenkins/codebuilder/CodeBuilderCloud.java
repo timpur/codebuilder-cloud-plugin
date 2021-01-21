@@ -371,7 +371,7 @@ public class CodeBuilderCloud extends Cloud {
    */
   private long numStillProvisioning() {
     return jenkins().getNodes().stream().filter(CodeBuilderAgent.class::isInstance).map(CodeBuilderAgent.class::cast)
-        .filter(a -> !a.getLauncher().isLaunchSupported()).count();
+        .filter(a -> a.getLauncher().isLaunchSupported()).count();
   }
 
   /** {@inheritDoc} */
